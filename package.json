@@ -1,0 +1,28 @@
+{
+  "name": "hls-streaming",
+  "version": "1.0.0",
+  "description": "A full-stack video streaming platform built using Node.js, Express, and FFmpeg",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/souravsinghadhikari/HLS-Streaming.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/souravsinghadhikari/HLS-Streaming/issues"
+  },
+  "homepage": "https://github.com/souravsinghadhikari/HLS-Streaming#readme",
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
