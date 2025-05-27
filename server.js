@@ -1,8 +1,9 @@
-require('dotenv').config();
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs-extra'); 
+
+const generateVideoSegments = require('./utils/ffmpeg');
+const fs = require('fs-extra');
 
 const app = express();
 
@@ -22,6 +23,8 @@ app.post('/upload', upload.single('video'), async (req, res) => {
   let { title, date, info } = req.body;
   const filePath = req.file.path;
 
+  console.log(title);
+
   if (!date) date = '';
   if (!title) title = path.parse(req.file.originalname).name;
   if (!info) info = '';
@@ -29,16 +32,18 @@ app.post('/upload', upload.single('video'), async (req, res) => {
   const outputDir = path.join(__dirname, 'public', 'videos', title);
   await fs.ensureDir(outputDir);
 
-  await fs.copy(filePath, path.join(outputDir, req.file.originalname));
-
-  res.status(200).json({ message: 'Video uploaded successfully.' });
+  try {
+    await generateVideoSegments(filePath, outputDir, title, res);
+  } catch (error) {
+    res.status(500).json({ message: 'Error processing video.' });
+  }
 });
 
-app.get('/', (req, res) => {
-  res.send('HLS streaming server running...');
+app.get('/data', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'data.json'));
 });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
